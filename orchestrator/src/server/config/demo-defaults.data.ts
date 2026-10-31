@@ -266,6 +266,7 @@ export const DEMO_SOURCE_BASE_URLS: Record<JobSource, string> = {
   wazzuf: "https://wuzzuf.net",
   freehire: "https://freehire.me",
   glorri: "https://jobs.glorri.az",
+  jobsearch: "https://jobsearch.az",
   manual: "https://example.com",
 };
 

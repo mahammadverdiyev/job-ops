@@ -18,6 +18,7 @@ export const EXTRACTOR_SOURCE_IDS = [
   "wazzuf",
   "freehire",
   "glorri",
+  "jobsearch",
   "manual",
 ] as const;
 
@@ -89,6 +90,7 @@ export const EXTRACTOR_SOURCE_METADATA: Record<
   wazzuf: { label: "WUZZUF", order: 110, category: "pipeline" },
   freehire: { label: "FreeHire", order: 115, category: "pipeline" },
   glorri: { label: "Glorri", order: 117, category: "pipeline" },
+  jobsearch: { label: "Jobsearch.az", order: 118, category: "pipeline" },
   manual: { label: "Manual", order: 120, category: "manual" },
 };
 

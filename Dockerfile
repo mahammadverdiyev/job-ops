@@ -96,6 +96,7 @@ COPY extractors/fiveamsat/package*.json ./extractors/fiveamsat/
 COPY extractors/wazzuf/package*.json ./extractors/wazzuf/
 COPY extractors/freehire/package*.json ./extractors/freehire/
 COPY extractors/glorri/package*.json ./extractors/glorri/
+COPY extractors/jobsearch/package*.json ./extractors/jobsearch/
 COPY extractors/browser-utils/package*.json ./extractors/browser-utils/
 
 # Install build-time Node dependencies on the native builder platform. The
@@ -127,6 +128,7 @@ COPY extractors/fiveamsat ./extractors/fiveamsat
 COPY extractors/wazzuf ./extractors/wazzuf
 COPY extractors/freehire ./extractors/freehire
 COPY extractors/glorri ./extractors/glorri
+COPY extractors/jobsearch ./extractors/jobsearch
 COPY extractors/browser-utils ./extractors/browser-utils
 
 # ============================================================================
@@ -176,6 +178,7 @@ COPY extractors/fiveamsat/package*.json ./extractors/fiveamsat/
 COPY extractors/wazzuf/package*.json ./extractors/wazzuf/
 COPY extractors/freehire/package*.json ./extractors/freehire/
 COPY extractors/glorri/package*.json ./extractors/glorri/
+COPY extractors/jobsearch/package*.json ./extractors/jobsearch/
 COPY extractors/browser-utils/package*.json ./extractors/browser-utils/
 
 # Install production Node dependencies only.
@@ -272,6 +275,7 @@ COPY extractors/fiveamsat ./extractors/fiveamsat
 COPY extractors/wazzuf ./extractors/wazzuf
 COPY extractors/freehire ./extractors/freehire
 COPY extractors/glorri ./extractors/glorri
+COPY extractors/jobsearch ./extractors/jobsearch
 COPY extractors/browser-utils ./extractors/browser-utils
 
 # Create runtime directories.

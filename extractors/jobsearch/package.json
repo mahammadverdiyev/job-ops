@@ -1,0 +1,13 @@
+{
+  "name": "jobsearch-extractor",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Jobsearch.az extractor backed by the public api-az JSON endpoints",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "~5.9.0"
+  },
+  "scripts": {
+    "check:types": "tsc --noEmit"
+  }
+}
