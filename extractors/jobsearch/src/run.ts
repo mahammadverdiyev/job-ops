@@ -1,5 +1,5 @@
 import { normalizeCountryKey } from "job-ops-shared/location-support";
-import { matchesRequestedCity } from "job-ops-shared/search-cities";
+import { resolveSearchCities } from "job-ops-shared/search-cities";
 import type { CreateJobInput } from "job-ops-shared/types/jobs";
 
 /**
@@ -281,13 +281,16 @@ function matchesSelectedCountry(selectedCountry: string | undefined): boolean {
  * at all. Country evidence must be supplied explicitly, otherwise the shared
  * location matcher sees an empty candidate list and drops every row.
  */
-function buildLocationEvidence(country: string): CreateJobInput["locationEvidence"] {
+function buildLocationEvidence(
+  country: string,
+  city: string | null,
+): CreateJobInput["locationEvidence"] {
   return {
     rawLocation: null,
-    location: null,
+    location: city,
     countryKey: country,
     country,
-    city: null,
+    city,
     evidenceQuality: "approximate",
     source: "jobsearch",
   };
@@ -296,6 +299,7 @@ function buildLocationEvidence(country: string): CreateJobInput["locationEvidenc
 function mapJobsearchRow(
   row: JobsearchRow,
   detail: JobsearchDetailPayload | null,
+  evidenceCity: string | null = null,
 ): CreateJobInput | null {
   const jobUrl = buildJobUrl(row);
   if (!jobUrl) return null;
@@ -339,7 +343,7 @@ function mapJobsearchRow(
      * `locationEvidence`.
      */
     location: "Azərbaycan",
-    locationEvidence: buildLocationEvidence("azerbaijan"),
+    locationEvidence: buildLocationEvidence("azerbaijan", evidenceCity),
     jobDescription: description,
     datePosted:
       typeof row.created_at === "string" ? row.created_at : undefined,
@@ -384,6 +388,13 @@ export async function runJobsearch(
    * Azerbaijan-only, and the country gate already restricts the run, so a
    * country-wide search with per-row country evidence is the accurate choice.
    */
+  /**
+   * The list payload carries no city, so the only city evidence available is
+   * what the user asked for. Without it the orchestrator's proximity branch
+   * has no candidate to match against and drops every row as `no_match`.
+   */
+  const requestedLocations = resolveSearchCities({ list: options.locations });
+
   try {
     const jobs: CreateJobInput[] = [];
     const seen = new Set<string>();
@@ -422,7 +433,11 @@ export async function runJobsearch(
           ? await fetchJobsearchDetail({ fetchImpl, slug })
           : null;
 
-        const mapped = mapJobsearchRow(row, detail);
+        const mapped = mapJobsearchRow(
+          row,
+          detail,
+          requestedLocations[0] ?? null,
+        );
         if (!mapped) continue;
 
         const dedupeKey = mapped.sourceJobId || mapped.jobUrl;

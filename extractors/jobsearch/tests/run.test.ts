@@ -185,6 +185,42 @@ describe("runJobsearch", () => {
     expect(result.jobs).toHaveLength(2);
   });
 
+  /**
+   * Regression: a UI search with a city selected sets `cityLocations`, which
+   * makes the orchestrator take its proximity branch. The list payload carries
+   * no city at all, so without requested-city evidence every row was dropped
+   * as `no_match` (95 rows in the reported run).
+   */
+  it("emits requested city as location evidence", async () => {
+    const { impl } = makeFetch([ENGINEER_ROW]);
+    const result = await runJobsearch({
+      searchTerms: ["engineer"],
+      selectedCountry: "azerbaijan",
+      locations: ["Baku"],
+      fetchImpl: impl,
+    });
+
+    expect(result.jobs).toHaveLength(1);
+    const evidence = result.jobs[0].locationEvidence as {
+      country: string | null;
+      city: string | null;
+    };
+    expect(evidence.country).toBe("azerbaijan");
+    expect(evidence.city).toBe("Baku");
+  });
+
+  it("emits null city when no location is requested", async () => {
+    const { impl } = makeFetch([ENGINEER_ROW]);
+    const result = await runJobsearch({
+      searchTerms: ["engineer"],
+      selectedCountry: "azerbaijan",
+      fetchImpl: impl,
+    });
+
+    const evidence = result.jobs[0].locationEvidence as { city: string | null };
+    expect(evidence.city).toBeNull();
+  });
+
   it("dedupes rows seen across multiple search terms", async () => {
     const { impl } = makeFetch([ENGINEER_ROW]);
     const result = await runJobsearch({
