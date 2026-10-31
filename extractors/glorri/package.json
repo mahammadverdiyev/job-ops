@@ -1,0 +1,13 @@
+{
+  "name": "glorri-extractor",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Glorri extractor backed by the public job-service-v2 board API",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "~5.9.0"
+  },
+  "scripts": {
+    "check:types": "tsc --noEmit"
+  }
+}

@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 from jobspy import scrape_jobs
+from jobspy.model import Country as JobSpyCountry
 
 PROGRESS_PREFIX = "JOBOPS_PROGRESS "
 COUNTRY_ALIASES = {
@@ -77,6 +78,27 @@ def _normalize_country_token(value: str) -> str:
     return COUNTRY_ALIASES.get(normalized, normalized)
 
 
+def _supported_country_values() -> set[str]:
+    """Valid ``country_indeed`` strings for the installed JobSpy."""
+    return {member.value for member in JobSpyCountry}
+
+
+def _jobspy_country_argument(country_indeed: str) -> str | None:
+    """Return a ``country_indeed`` value JobSpy accepts, or ``None``.
+
+    JobSpy validates ``country_indeed`` against a fixed ``Country`` enum and
+    raises a pydantic ``ValidationError`` for anything else. Countries outside
+    that enum still have working LinkedIn searches, because LinkedIn's geo
+    filter is the free-text ``location`` argument; ``country_indeed`` is only
+    consulted for one salary heuristic. Returning ``None`` lets the caller omit
+    the argument entirely and fall back to JobSpy's default.
+    """
+    normalized = _normalize_country_token(country_indeed)
+    if not normalized:
+        return None
+    return normalized if normalized in _supported_country_values() else None
+
+
 def _is_country_level_location(location: str, country_indeed: str) -> bool:
     if not location.strip() or not country_indeed.strip():
         return False
@@ -107,8 +129,9 @@ def _scrape_for_sites(
         "linkedin_fetch_description": linkedin_fetch_description,
         "is_remote": is_remote,
     }
-    if country_indeed and country_indeed.strip():
-        kwargs["country_indeed"] = country_indeed
+    resolved_country = _jobspy_country_argument(country_indeed)
+    if resolved_country:
+        kwargs["country_indeed"] = resolved_country
     if location and location.strip():
         kwargs["location"] = location
     return scrape_jobs(**kwargs)

@@ -148,6 +148,15 @@ const HEALTH_PROBE_CONFIG_BY_SOURCE: Record<
       jobspyResultsWanted: "1",
     },
   },
+  glorri: {
+    searchTerm: DEFAULT_HEALTH_SEARCH_TERM,
+    // The board only serves Azerbaijan, so probing with the default country
+    // would report an empty run as unhealthy.
+    selectedCountry: "azerbaijan",
+    settings: {
+      jobspyResultsWanted: "1",
+    },
+  },
   manual: {
     searchTerm: DEFAULT_HEALTH_SEARCH_TERM,
     selectedCountry: DEFAULT_HEALTH_SELECTED_COUNTRY,

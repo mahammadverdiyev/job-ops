@@ -236,6 +236,7 @@ export const JOBSPY_SUPPORTED_COUNTRY_KEYS = [
   "argentina",
   "australia",
   "austria",
+  "azerbaijan",
   "bahrain",
   "bangladesh",
   "belgium",

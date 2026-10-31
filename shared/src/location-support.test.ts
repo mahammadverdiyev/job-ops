@@ -68,6 +68,10 @@ describe("location-support", () => {
     expect(isSourceAllowedForCountry("jobindex", "united kingdom")).toBe(false);
     expect(isSourceAllowedForCountry("indeed", "united states")).toBe(true);
     expect(isSourceAllowedForCountry("linkedin", "worldwide")).toBe(true);
+    // Azerbaijan has no JobSpy country enum entry, but LinkedIn still resolves
+    // a free-text location, so the source must stay enabled for it.
+    expect(isSourceAllowedForCountry("linkedin", "azerbaijan")).toBe(true);
+    expect(isSourceAllowedForCountry("indeed", "azerbaijan")).toBe(true);
     expect(isSourceAllowedForCountry("glassdoor", "united states")).toBe(true);
     expect(isSourceAllowedForCountry("glassdoor", "japan")).toBe(false);
     expect(isSourceAllowedForCountry("adzuna", "united states")).toBe(true);
