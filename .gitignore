@@ -1,6 +1,49 @@
 # Environment files
+# Every real .env variant may hold API keys / tokens. Keep .env.example
+# committed as the documented template.
 .env
+.env.*
+*.env
 *.env.local
+!.env.example
+!**/.env.example
+
+# Secrets, credentials and private keys — never commit these
+secrets/
+*.secret
+*.secrets
+credentials.json
+*credential*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+id_rsa
+id_rsa.*
+id_dsa
+id_dsa.*
+id_ecdsa
+id_ecdsa.*
+id_ed25519
+id_ed25519.*
+
+# Local databases and SQLite sidecar files (job data, auth sessions)
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# Runtime auth / session state captured by extractors
+**/cookies.json
+**/storage-state.json
+**/auth-state.json
+**/session.json
+**/cloudflare-cookies/
 
 # Dependencies
 node_modules/
